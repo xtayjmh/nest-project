@@ -5,10 +5,12 @@ import { HttpFilter } from './common/filter';
 import { Response } from './common/Response';
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { join } from 'path';
+import { JwtAuthGuard } from './auth/jwt-auth/jwt-auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.setGlobalPrefix('api') //添加接口前缀:从localhost:3000/变成localhost:3000/api/
+  app.useGlobalGuards(new JwtAuthGuard())
   app.use(session({
     secret: "XiaoMan", name: "xm.session",
     rolling: true, cookie: { maxAge: null }
