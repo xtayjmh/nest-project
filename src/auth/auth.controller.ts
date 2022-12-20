@@ -1,32 +1,20 @@
-import { Controller, Get, UseGuards, Request, Post, Body } from '@nestjs/common';
+import { Controller, Post, UseGuards, Request, Body } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { LocalAuthGuard } from '../local-auth/local-auth.guard';
 import { AuthService } from './auth.service';
-import { ApiTags } from '@nestjs/swagger';
-@Controller()
-export class AuthController {
-    constructor(private readonly authService: AuthService) { }
-    /**
-     * @通过UseGuards装饰器引用本地策略拿到返回的用户
-     * @返回token
-     * @param req
-     */
-    @ApiTags('用户登录')
-    // @UseGuards(LocalAuthGuard)
-    @Post('auth/login')
-    async login(@Body() req) {
-        console.log(req.user);
+import { JwtAuthGuard } from './jwt-auth.guard';
 
-        return this.authService.login(req.user);
+@Controller('auth')
+export class AuthController {
+    constructor(private authService: AuthService) { }
+    @UseGuards(AuthGuard('local'))
+    @Post('login')
+    async login(@Body() body) {
+        return this.authService.login(body)
     }
 
-    /**
-     * @验证登录信息:通过token解析出用户id用户名
-     * @param req
-     */
-    @UseGuards(AuthGuard('jwt'))
-    @Get('profile')
-    getProfile(@Request() req) {
-        return req.user;
+    @Post('profile')
+    @UseGuards(JwtAuthGuard)
+    async profile(@Body() body) {
+        return body;
     }
 }

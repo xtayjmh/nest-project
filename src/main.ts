@@ -5,7 +5,7 @@ import { HttpFilter } from './common/filter';
 import { Response } from './common/Response';
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { join } from 'path';
-import { JwtAuthGuard } from './auth/jwt-auth/jwt-auth.guard';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
