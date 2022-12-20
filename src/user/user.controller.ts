@@ -1,34 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* user.controller.ts */
+// 引入 Nest.js 内置的各个功能
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+// 引入用户服务
 import { UserService } from './user.service';
+// 引入创建用户 DTO 用于限制从接口处传来的参数
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-
+// 配置局部路由
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  constructor(private readonly userService: UserService) { }
+  // 创建user路由 user/createUser
+  @Post('createUser')
+  async createUser(@Body() body: CreateUserDto) {
+    return this.userService.create(body);
   }
-
-  @Get()
-  findAll() {
+  //查找所有 user 路由
+  @Get('findAll')
+  async findAll() {
     return this.userService.findAll();
   }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  // 查找某一个用户路由
+  @Get('findOne')
+  async findOne(@Query() query: any) {
+    return this.userService.findOne(query.name);
+  }
+  // 删除一个用户的路由
+  @Delete(':sid')
+  deleteUser(@Param() param: any) {
+    return this.userService.delete(param.sid);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
-  }
 }

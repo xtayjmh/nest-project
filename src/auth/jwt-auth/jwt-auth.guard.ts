@@ -29,11 +29,10 @@ export class JwtAuthGuard implements CanActivate {
     const userService = app.get(UserService);
     const user = await authService.verifyToken(accessToken);
     console.log(222222222, user);
-    return true;
-    //todo 需要查询真实用户
     if (Object.keys(user).length > 0) {
-      const resData = await userService.findOne(user.sub);
-      if (resData.code === 200) return true;
+      const resData = await userService.findOne(user.username);
+      console.log(resData, 'resData');
+      if (resData) return true;
     }
   }
   // 白名单数组

@@ -1,3 +1,1 @@
-export class User {
-    password: string
-}
+export class User {}
