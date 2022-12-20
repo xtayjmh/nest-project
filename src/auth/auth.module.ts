@@ -7,7 +7,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
-import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [
@@ -18,7 +17,7 @@ import { UserService } from 'src/user/user.service';
       signOptions: { expiresIn: 3600 * 24 * 7 + 's' }//有效时间
     })
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, UserService],
+  providers: [AuthService, LocalStrategy, JwtStrategy], //这里之前加了一个UserService困扰了老子一天！！！其实只要在imports里边导入UserModule就好了。
   controllers: [AuthController],
   exports: [AuthService]
 })
